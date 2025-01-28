@@ -40,12 +40,13 @@ jobs:
       run: |
         sed -i "s|{{TAG}}|${{ github.sha }}|g" deployment.yml
 
-    - name: Set up kubectl and Authenticate with EKS
-      uses: aws-actions/eks-login@v1
+    - name: "Install Kubectl"
+      uses: alexellis/arkade-get@23907b6f8cec5667c9a4ef724adea073d677e221
       with:
-        cluster-name: "MyEKSCluster"
-        region: us-east-1 # Replace with your AWS region
-
-    - name: Deploy to EKS
+        kubectl: latest
+    
+    - name: "Deploy"
       run: |
+        aws eks update-kubeconfig --name MyEKSCluster
         kubectl apply -f deployment.yml
+      
